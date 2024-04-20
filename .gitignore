@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Visual_Odometry_miniproject/Data/DJI_0199.MOV
