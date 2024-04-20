@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>6ab4cb0a-879b-4364-b840-d391d5cd57cb</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Visual_Odometry_miniproject.py</StartupFile>
+    <StartupFile>extract_frames.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,18 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="data extraction.py" />
+    <Compile Include="extract_frames.py" />
     <Compile Include="Visual_Odometry_miniproject.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Outputs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\DJIFlightRecord_2021-03-18_[13-04-51]-TxtLogToCsv.csv" />
+    <Content Include="Data\DJI_0199.MOV" />
+    <Content Include="Data\phantom4pro-calibration.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
