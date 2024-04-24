@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>6ab4cb0a-879b-4364-b840-d391d5cd57cb</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>extract_frames.py</StartupFile>
+    <StartupFile>visual_slam.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,9 +21,21 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="3D_map_initialization.py" />
+    <Compile Include="custom_types.py" />
     <Compile Include="data extraction.py" />
+    <Compile Include="Datatypes.py" />
     <Compile Include="extract_frames.py" />
-    <Compile Include="Visual_Odometry_miniproject.py" />
+    <Compile Include="Frame.py" />
+    <Compile Include="FrameGenerator.py" />
+    <Compile Include="ImagePair.py" />
+    <Compile Include="Map.py" />
+    <Compile Include="map_initialization.py" />
+    <Compile Include="Observation.py" />
+    <Compile Include="ThreeDimViewer.py" />
+    <Compile Include="TrackedCamera.py" />
+    <Compile Include="TrackedPoint.py" />
+    <Compile Include="visual_slam.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
