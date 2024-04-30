@@ -41,6 +41,39 @@ class ImagePair():
                 for match
                 in self.raw_matches
                 if match.distance < 1130]
+        
+        points_in_frame_1, points_in_frame_2 = self.get_image_points(self.filtered_matches)
+        
+        F, mask = cv2.findFundamentalMat(points_in_frame_1, points_in_frame_2, cv2.FM_RANSAC)
+
+        # Compute the epipolar lines for each set of points
+        lines1 = cv2.computeCorrespondEpilines(points_in_frame_2.reshape(-1, 1, 2), 2, F, self.camera_matrix)
+        lines2 = cv2.computeCorrespondEpilines(points_in_frame_1.reshape(-1, 1, 2), 1, F, self.camera_matrix)
+        lines1 = lines1.reshape(-1, 3)
+        lines2 = lines2.reshape(-1, 3)
+
+        def distance_to_line(point, line):
+            a, b, c = line
+            x0, y0 = point
+            return np.abs(a * x0 + b * y0 + c) / np.sqrt(a**2 + b**2)
+
+        # Calculate distances for each set of points to their corresponding epipolar lines
+        distances1 = np.array([distance_to_line((points_in_frame_1[i][0], points_in_frame_1[i][1]), lines1[i]) for i in range(len(points_in_frame_1))])
+        distances2 = np.array([distance_to_line((points_in_frame_2[i][0], points_in_frame_2[i][1]), lines2[i]) for i in range(len(points_in_frame_2))])
+
+        # Summary statistics
+        mean_distance1 = np.mean(distances1)
+        std_distance1 = np.std(distances1)
+        mean_distance2 = np.mean(distances2)
+        std_distance2 = np.std(distances2)
+
+        print("Statistics for Image 1 -> Image 2:")
+        print(f"Mean Distance: {mean_distance1}")
+        print(f"Standard Deviation: {std_distance1}")
+
+        print("Statistics for Image 2 -> Image 1:")
+        print(f"Mean Distance: {mean_distance2}")
+        print(f"Standard Deviation: {std_distance2}")
 
 
     def visualize_matches(self, matches):
@@ -77,40 +110,7 @@ class ImagePair():
                 if inlier]
 
         return inlier_matches
-
-
-    def calculate_epipolar_distances(self, essential_matches):
-        points_in_frame_1, points_in_frame_2 = self.get_image_points(essential_matches)
-
-        # Compute the epipolar lines for each set of points
-        lines1 = cv2.computeCorrespondEpilines(points_in_frame_2.reshape(-1, 1, 2), 2, self.essential_matrix, self.camera_matrix)
-        lines2 = cv2.computeCorrespondEpilines(points_in_frame_1.reshape(-1, 1, 2), 1, self.essential_matrix, self.camera_matrix)
-        lines1 = lines1.reshape(-1, 3)
-        lines2 = lines2.reshape(-1, 3)
-
-        def distance_to_line(point, line):
-            a, b, c = line
-            x0, y0 = point
-            return np.abs(a * x0 + b * y0 + c) / np.sqrt(a**2 + b**2)
-
-        # Calculate distances for each set of points to their corresponding epipolar lines
-        distances1 = np.array([distance_to_line((points_in_frame_1[i][0], points_in_frame_1[i][1]), lines1[i]) for i in range(len(points_in_frame_1))])
-        distances2 = np.array([distance_to_line((points_in_frame_2[i][0], points_in_frame_2[i][1]), lines2[i]) for i in range(len(points_in_frame_2))])
-
-        # Summary statistics
-        mean_distance1 = np.mean(distances1)
-        std_distance1 = np.std(distances1)
-        mean_distance2 = np.mean(distances2)
-        std_distance2 = np.std(distances2)
-
-        print("Statistics for Image 1 -> Image 2:")
-        print(f"Mean Distance: {mean_distance1}")
-        print(f"Standard Deviation: {std_distance1}")
-
-        print("Statistics for Image 2 -> Image 1:")
-        print(f"Mean Distance: {mean_distance2}")
-        print(f"Standard Deviation: {std_distance2}")
-
+    
 
     def get_image_points(self, matches):
         points_in_frame_1 = np.array(

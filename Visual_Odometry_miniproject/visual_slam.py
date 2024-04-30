@@ -390,7 +390,6 @@ class VisualSlam:
         self.current_image_pair = ImagePair(frame1, frame2, self.bf, self.camera_matrix)
         self.current_image_pair.match_features()
         essential_matches = self.current_image_pair.determine_essential_matrix(self.current_image_pair.filtered_matches)
-        self.current_image_pair.calculate_epipolar_distances(essential_matches)
         self.current_image_pair.estimate_camera_movement(essential_matches)
         self.current_image_pair.reconstruct_3d_points(essential_matches)
 
@@ -407,32 +406,6 @@ class VisualSlam:
 
         self.map.limit_number_of_camera_in_map(18)
         cv2.waitKey(100)
-
-
-    def show_2d_camera_path(self):
-        # Initialize a 2D plot
-        plt.figure()
-        plt.xlabel('X Position')
-        plt.ylabel('Y Position')
-        plt.title('Camera Trajectory in 2D')
-        last_pos = None
-        for camera in self.map.cameras:
-            # Assume the camera object has a method pose() that returns a 4x4 transformation matrix
-            pose = camera.pose()
-            current_pos = pose[:3, 3]  # Extract translation vector (x, y, z)
-
-            # Plot only the x and y coordinates
-            plt.scatter(current_pos[0], current_pos[1], color='blue')  # plot point
-    
-            # Optionally, plot line from the last position to the current to emphasize the trajectory
-            if last_pos is not None:
-                plt.plot([last_pos[0], current_pos[0]], [last_pos[1], current_pos[1]], 'r-')
-    
-            last_pos = current_pos  # update the last known position
-
-        # Show final plot
-        plt.axis('equal')  # Set equal scaling by changing axis limits
-        plt.show()
 
 
     def show_3d_visualization(self):
