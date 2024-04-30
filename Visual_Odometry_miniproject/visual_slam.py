@@ -404,7 +404,7 @@ class VisualSlam:
         self.freeze_nonlast_cameras()
         #self.print_camera_details()
 
-        self.map.limit_number_of_camera_in_map(18)
+        self.map.limit_number_of_camera_in_map(83)
         cv2.waitKey(100)
 
 
@@ -471,8 +471,6 @@ class VisualSlam:
                 self.map.optimize_map()
                 self.freeze_nonlast_cameras()
                 #self.print_camera_details()
-        
-        self.show_2d_camera_path()
 
         while True:
             k = cv2.waitKey(100)
